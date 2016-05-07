@@ -18,14 +18,16 @@ public class CardLibrary {
     }
 
     public boolean load(File file) {
+        String str = null;
         try(Scanner in = new Scanner(file)) {
             while (in.hasNextLine()) {
-                String str = in.nextLine();
+                str = in.nextLine();
                 Card card = parseCard(str);
                 if (card != null)
                     library.putIfAbsent(card.getName(), str);
             }
         } catch(Exception e) {
+            System.out.println(str);
             e.printStackTrace();
             return false;
         }

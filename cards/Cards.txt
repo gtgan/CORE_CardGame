@@ -6,6 +6,23 @@ Ability format: activateType:activateSubtype:abilityType:abilitySubtype:target:t
 mon`King of the Void`Passive: This card negates the effects of all other monsters when active\nSacrifice: any 3 benched allies`null`10`20`50`3`onPlay:null:negateEffect:continuous:both:allmon:1:0
 mon`Slime`Slimes regenerate health over time, making them a nuisance to weak opponents.\nPassive: heal self 2/turn`WATER`4`5`10`0`passive:null:changeHealth:continuous:ally:self:2:0
 mon`Salamander`Despite their size, Salamanders pack a lot of heat.\nCounter wood attack 5`FIRE`10`10`15`0`onDefend:attacker:damage:once:opponent:1WOODmon:5:0
+mon`Cursed Armor`It moves on its own, a cold and merciless presence on the battlefield.`METAL`15`15`20`0
+mon`Ember`It only takes a single ember to start a forest fire.\nOn death: destroy all wood enemies`FIRE`9`5`5`0`onDeath:null:destroy:once:opponent:allWOODmon:0:0
+mon`Imp`Although nominally demons, Imps are largely incapable of magic.`FIRE`6`5`9`0
+mon`Lava Golem`The molten rock forms the joints, while the solid stone behaves like bone.`FIRE`10`10`14`0
+mon`Will-o-the-Wisp`These ethereal creatures often lead travellers astray with their bioluminescence.`FIRE`2`2`3`0
+mon`Mushboom`For some reason, these mushrooms release explosive spores.\nOn death: counter 20`WOOD`4`4`7`0`onDeath:attacker:damage:once:opponent:1mon:20:0
+mon`Scarecrow`Scarecrows are fantastically brainless and feel no pain.`WOOD`7`10`15`0
+mon`Electric Eel`Absolutely shocking.\nCounter: deal 3 dmg to attacker`WATER`8`7`10`0`onDefend:attacker:damage:once:opponent:1mon:3:0
+mon`Cloud Wolf`Cloud wolves hunt alone, using fog as cover.`WATER`9`8`12`0
+mon`King Salmon`The very essence of determination.`WATER`5`1`5`0
+mon`Drake`The Drake is an unintelligent species of dragon which heats literally anything.\nSacrifice: any 1 ally`FIRE`16`20`22`1
+mon`Drakeling`Drakelings are just baby Drakes, but their fire still packs a punch.`FIRE`5`4`7`0
+mon`Great Landshark`Some Great Landsharks have five-inch-long teeth.\nSacrifice: any 1 ally`EARTH`16`15`22`1
+mon`Landshark`It swims through soil as a normal shark swims through water.`EARTH`7`7`11`0
+mon`Massive Antlion`Unlike their normal-sized counterparts, Massive Antlions often prey on humans.`EARTH`8`9`12`0
+mon`Jiangshi`Also known as Chinese Hopping Vampires, Jiangshi are not vulnerable to crosses, garlic, or sunlight.`EARTH`10`8`16`0
+mon`Skeleton`Reanimated bones make for a frightening and ferocious adversary.`EARTH`6`8`12`0
 
     Magic card format: mag`Name`Description`ELEMENT`manaCost`isEquip`abilities*
 mag`Poisoning`Continuous: opponent takes 1 damage per turn`null`5`false`passive:null:damage:continuous:opponent:player:1:0

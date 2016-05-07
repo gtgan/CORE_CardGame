@@ -17,13 +17,13 @@ public class Player implements PlayerInterface {
         maxMana = 100;
         manaRegen = 10;
         health = maxHealth = 50;
-        hand = new Card[5];
+        hand = new Card[7]; // at most 7 cards in hand
         monsters = new MonsterCard[5]; // 0 index is main monster
         modifiers = new ModifierCard[3];
         graveyard = new LinkedList<Card>();
         this.deck = deck;
         boolean needsL0Monster = false;
-        for (int i = 1; i < hand.length; i ++) {
+        for (int i = 1; i < 4; i ++) {
             hand[i] = draw();
             if (hand[i] instanceof MonsterCard && ((MonsterCard) hand[i]).sacrifices == 0)
                 needsL0Monster = true;
@@ -41,7 +41,7 @@ public class Player implements PlayerInterface {
         for (; i < hand.length; i ++) // cannot draw if hand is full
             if (hand[i] == null)
                 break;
-        if (i < 5) {
+        if (i < hand.length) {
             c = (l0Monster ? deck.drawL0Monster() : deck.draw());
             hand[i] = c;
         }
@@ -110,7 +110,7 @@ public class Player implements PlayerInterface {
     public Player setOpponent(Player opponent) {
         Player hold = this.opponent;
         this.opponent = opponent;
-        opponent.setOpponent(this);
+        this.opponent.opponent = this;
         return hold;
     }
 
@@ -147,6 +147,7 @@ public class Player implements PlayerInterface {
         }
     }
 
+    public int getNumCardsLeft() { return deck.size(); }
     public MonsterCard getMainMonster() { return monsters[0]; }
 
     public void battlePhase(Card... useSpecial) {
@@ -169,7 +170,11 @@ public class Player implements PlayerInterface {
             }
         }
         if (monsters[0] != null) {
-            if (!useSpecial.contains(monsters[0])) {
+            boolean contains = false;
+            for (Card c : useSpecial)
+                if (c.equals(monsters[0]))
+                    contains = true;
+            if (!contains) {
                 MonsterCard opponentMain = opponent.getMainMonster();
                 monsters[0].attack(opponentMain == null ? opponent : opponentMain);
             } else {
@@ -177,6 +182,7 @@ public class Player implements PlayerInterface {
             }
         }
         playedThisTurn.clear();
+        changeMana(manaRegen);
     }
     public void buryDead() { // remove dead monsters from the field
         for (int i = 0; i < monsters.length; i ++)
