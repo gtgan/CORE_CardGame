@@ -86,5 +86,5 @@ public interface PlayerInterface extends Attackable {
     public int changeManaRegen(int change);
     public Deck getDeck();
     public int attack(Card attacker, Attackable... targets);
-    public int attack(Card attacker, boolean useSpecialIfPossible, Attackable... targets);
+    public int attack(Card attacker, boolean useSpecialIfPossible);
 }

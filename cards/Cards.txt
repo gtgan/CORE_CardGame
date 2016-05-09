@@ -3,10 +3,10 @@ This list of cards is not complete.
 Ability format: activateType:activateSubtype:abilityType:abilitySubtype:target:targetSpecifications:magnitude:manaCost
 
     Monster card format: mon`Name`Description`ELEMENT`manaCost`atk`def`numSacrifices`abilities*
-mon`King of the Void`Passive: This card negates the effects of all other monsters when active\nSacrifice: any 3 benched allies`null`10`20`50`3`onPlay:null:negateEffect:continuous:both:allmon:1:0
+mon`King of the Void`Passive: This card negates the effects of all other monsters when active\nSacrifice: any 3 benched allies`null`10`20`50`3`onPlay:null:negateEffect:continuous:all:allmon:1:0
 mon`Slime`Slimes regenerate health over time, making them a nuisance to weak opponents.\nPassive: heal self 2/turn`WATER`4`5`10`0`passive:null:changeHealth:continuous:ally:self:2:0
 mon`Salamander`Despite their size, Salamanders pack a lot of heat.\nCounter wood attack 5`FIRE`10`10`15`0`onDefend:attacker:damage:once:opponent:1WOODmon:5:0
-mon`Cursed Armor`It moves on its own, a cold and merciless presence on the battlefield.`METAL`15`15`20`0
+mon`Cursed Armor`It moves on its own, a cold and merciless presence on the battlefield.`METAL`15`15`16`1
 mon`Ember`It only takes a single ember to start a forest fire.\nOn death: destroy all wood enemies`FIRE`9`5`5`0`onDeath:null:destroy:once:opponent:allWOODmon:0:0
 mon`Imp`Although nominally demons, Imps are largely incapable of magic.`FIRE`6`5`9`0
 mon`Lava Golem`The molten rock forms the joints, while the solid stone behaves like bone.`FIRE`10`10`14`0
@@ -31,6 +31,6 @@ mag`Plate Armor`This set of armor is forged from high-quality steel.\nBoost any 
 mag`Refreshing Mist`Fully heals a water-element monster.\nHeal 1 water ally 100%`WATER`8`false`onPlay:ally:changeHealth:once:ally:1WATERmon:255:0
 
     Modifier card format: mod`Name`Description`ELEMENT`manaCost`abilities*
-mod`Forest`Continuous: increase defense of all Wood monsters by 3`null`8`onPlay:whenTargetPlayed:changeDef:once:both:allWOOD:3:0
-mod`Acid Rain`Acid rain deals damage to Water- and Wood-type monsters every turn.\nDamage each Water monster 3/turn\nDamage each Wood monster 4/turn`WATER`10`passive:null:damage:continuous:both:allWATERmon:3:0`passive:null:damage:continuous:both:allWOODmon:4:0`active:any:destroy:null:self:null:0:20
+mod`Forest`Continuous: increase defense of all Wood monsters by 3`null`8`onPlay:whenTargetPlayed:changeDef:once:all:allWOOD:3:0
+mod`Acid Rain`Acid rain deals damage to Water- and Wood-type monsters every turn.\nDamage each Water monster 3/turn\nDamage each Wood monster 4/turn`WATER`10`passive:null:damage:continuous:all:allWATERmon:3:0`passive:null:damage:continuous:all:allWOODmon:4:0`active:any:destroy:null:self:null:0:20
 mod`Greater Magic Affinity`Continuous: the player gains an extra 7 mana per turn`null`7`passive:null:changeMana:continuous:ally:player:7:0

@@ -50,7 +50,25 @@ public class Player implements PlayerInterface {
     @Override
     public Card play(int placeInHand, int placeToPlay, Player playTo) {
         Card toPlay = hand[placeInHand];
-        // TODO implement play
+        if (toPlay == null || toPlay.getManaCost() > mana)
+            return null;
+        else if (toPlay instanceof MonsterCard) {
+            MonsterCard monster = (MonsterCard) toPlay;
+            if (monsters[placeToPlay] != null)
+                return null;
+            monsters[placeToPlay] = monster;
+        } else if (toPlay instanceof MagicCard) { // TODO implement play magic
+            MagicCard magic = (MagicCard) toPlay;
+            if (playTo.getMonsters()[placeToPlay] == null)
+                return null;
+        } else if (toPlay instanceof ModifierCard) {
+            ModifierCard modifier = (ModifierCard) toPlay;
+            if (playTo.getModifiers()[placeToPlay] != null)
+                return null;
+            playTo.getModifiers()[placeToPlay] = modifier;
+        }
+        hand[placeInHand] = null;
+        mana -= toPlay.getManaCost();
         playedThisTurn.add(toPlay);
         return toPlay;
     }
@@ -72,8 +90,8 @@ public class Player implements PlayerInterface {
     @Override public Player           getOpponent()  { return opponent;  }
     @Override public Deck             getDeck()      { return deck;      }
     @Override public Card[]           getHand()      { return hand;      }
-    @Override public Card[]           getMonsters()  { return monsters;  }
-    @Override public Card[]           getModifiers() { return modifiers; }
+    @Override public MonsterCard[]    getMonsters()  { return monsters;  }
+    @Override public ModifierCard[]   getModifiers() { return modifiers; }
     @Override public LinkedList<Card> getGraveyard() { return graveyard; }
 
     @Override
@@ -115,18 +133,49 @@ public class Player implements PlayerInterface {
     }
 
     @Override
-    public int attack(Card attacker, Attackable... targets) { return attack(attacker, false, targets); }
+    public int attack(Card attacker, Attackable... targets) {
+        for (Attackable target : targets)
+            if (attacker instanceof MonsterCard) {
+                target.defend((MonsterCard) attacker, ((MonsterCard) attacker).getAtk(), true);
+            } else {
+                // TODO implement attack for non-monsters
+            }
+        return targets.length;
+    }
     @Override
-    public int attack(Card attacker, boolean useSpecialIfPossible, Attackable... targets) {
+    public int attack(Card attacker, boolean useSpecialIfPossible) {
         int dmg = 0;
-        if (attacker instanceof MonsterCard && !useSpecialIfPossible) {
-            dmg = ((MonsterCard) attacker).getAtk();
+        Ability ability = null;
+        LinkedList<Attackable> targets = new LinkedList<Attackable>();
+        if (attacker instanceof MonsterCard) {
+            if (useSpecialIfPossible) {
+                for (Ability a : attacker.getAbilities())
+                    if (a.activateType.contains("active")) {
+                        ability = a;
+                        break;
+                    }
+                if (ability != null) {
+                    if (ability.targetSpec.contains("player")) {
+                        if (ability.target.contains("all"))
+                            targets.add(this);
+                        if (ability.target.contains("opponent") || ability.target.equals("all"))
+                            targets.add(opponent);
+                    }
+                }
+                for (Attackable target : targets)
+                    applyTo(ability, attacker, target);
+            } else
+                dmg = ((MonsterCard) attacker).getAtk();
         } else {
-            // TODO implement attack
+            // TODO implement attack for non-monsters
         }
         int i = 0;
         for (Attackable defender : targets)
-            i += defender.defend(attacker, dmg, true);
+            if (useSpecialIfPossible && ability != null) {
+                applyTo(ability, attacker, defender);
+            } else {
+                i += defender.defend(attacker, dmg, true);
+            }
         return i;
     }
 
@@ -155,7 +204,7 @@ public class Player implements PlayerInterface {
             for (Ability ability : card.getAbilities()) {
                 if (ability.activateType.contains("onPlay")) {
                     if (ability.targetSpec.contains("player")) { // abilities with effects on players
-                        boolean both = ability.target.contains("both");
+                        boolean both = ability.target.contains("all");
                         Player[] target = new Player[both ? 1 : 2];
                         if (both || ability.target.contains("ally"))
                             target[0] = this;
@@ -169,20 +218,27 @@ public class Player implements PlayerInterface {
                 }
             }
         }
+        for (Card sCard : useSpecial)
+            attack((MonsterCard) sCard, true);
         if (monsters[0] != null) {
             boolean contains = false;
             for (Card c : useSpecial)
                 if (c.equals(monsters[0]))
                     contains = true;
             if (!contains) {
-                MonsterCard opponentMain = opponent.getMainMonster();
-                monsters[0].attack(opponentMain == null ? opponent : opponentMain);
+                MonsterCard opponentMainMon = opponent.getMainMonster();
+                monsters[0].attack(opponentMainMon == null ? opponent : opponentMainMon);
             } else {
-                // TODO implement use special if possible
+
             }
         }
         playedThisTurn.clear();
         changeMana(manaRegen);
+        for (int i = 0; i < hand.length; i ++)
+            if (hand[i] == null) {
+                hand[i] = draw();
+                break;
+            }
     }
     public void buryDead() { // remove dead monsters from the field
         for (int i = 0; i < monsters.length; i ++)

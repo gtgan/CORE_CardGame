@@ -32,22 +32,14 @@ public abstract class Card implements Comparable<Card>, CardInterface {
         return false;
     }
 
-    @Override
-    public Element getElement()      { return element; }
-    @Override
-    public String getName()          { return name; }
-    @Override
-    public String getDescription()   { return description; }
-    @Override
-    public Ability[] getAbilities()  { return abilities; }
-    @Override
-    public String getType()          { return getClass().getSimpleName(); }
-    @Override
-    public int compareTo(Card other) { return name.compareTo(other.getName()); }
-    @Override
-    public int getManaCost()         { return manaCost; }
-    @Override
-    public boolean isFaceUp()        { return faceUp; }
+    @Override public Element getElement()      { return element; }
+    @Override public String getName()          { return name; }
+    @Override public String getDescription()   { return description; }
+    @Override public Ability[] getAbilities()  { return abilities; }
+    @Override public String getType()          { return getClass().getSimpleName(); }
+    @Override public int compareTo(Card other) { return name.compareTo(other.getName()); }
+    @Override public int getManaCost()         { return manaCost; }
+    @Override public boolean isFaceUp()        { return faceUp; }
     @Override
     public boolean flip() {
         faceUp = !faceUp;

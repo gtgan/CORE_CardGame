@@ -54,14 +54,15 @@ public class MonsterCard extends Card implements Attackable {
     public void sacrifice() { death(null); }
     @Override
     public void death(Card attacker) {
-        for (Ability a : abilities)
-            if (a != null && a.activateType.equals("death"))
-                switch(a.abilityType) {
-                case "counter":
-                    attack((MonsterCard) attacker, (int) a.magnitude, false);
-                    break;
-                // More cases will be added as the need arises.
-                }
+        if (attacker != null)
+            for (Ability a : abilities)
+                if (a != null && a.activateType.equals("death"))
+                    switch(a.abilityType) {
+                    case "counter":
+                        attack((MonsterCard) attacker, (int) a.magnitude, false);
+                        break;
+                    // More cases will be added as the need arises.
+                    }
     }
 
     public boolean equip(MagicCard equip)              { return equips.add(equip); }
